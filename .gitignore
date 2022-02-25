@@ -14,10 +14,14 @@ buildNumber.properties
 ### IntelliJ IDEA ###
 .idea/
 *.iws
-/test-client/test-client.iml
-/rpc-common/rpc-common.iml
-/rpc-core/rpc-core.iml
-/test-server/test-server.iml
-/rpc-api/rpc-api.iml
+test-client/test-client.iml
+rpc-common/rpc-common.iml
+rpc-core/rpc-core.iml
+test-server/test-server.iml
+rpc-api/rpc-api.iml
+rpc-api/target
+rpc-common/target
+test-client/target
+test-server/target
 *.ipr
 *.mvn
