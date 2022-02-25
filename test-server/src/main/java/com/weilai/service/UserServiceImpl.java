@@ -22,4 +22,10 @@ public class UserServiceImpl implements UserService{
 
         return user;
     }
+
+    @Override
+    public Integer insertUserId(User user) {
+        System.out.println("插入数据成功：" + user);
+        return 1;
+    }
 }

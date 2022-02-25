@@ -1,12 +1,7 @@
 package com.weilai.client;
 
 import com.weilai.common.User;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.Random;
+import com.weilai.service.UserService;
 
 /**
  * @ClassName SocketClient
@@ -14,23 +9,16 @@ import java.util.Random;
  */
 public class SocketClient {
     public static void main(String[] args) {
-        try {
-            // 建立Socket连接
-            Socket socket = new Socket("127.0.0.1", 8899);
-            ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+        ClientProxy clientProxy = new ClientProxy("127.0.0.1", 8899);
+        UserService proxy = clientProxy.getProxy(UserService.class);
 
-            // 给服务端传递id
-            outputStream.writeInt(new Random().nextInt());
-            outputStream.flush();
+        // method 1
+        User userByUserId = proxy.getUserByUserId(10);
+        System.out.println("从服务端得到的user为: " + userByUserId);
 
-            // 服务端查询数据，返回对应的对象
-            User user = (User) inputStream.readObject();
-            System.out.println("服务端返回的" + user);
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("客户端启动失败");
-        }
+        // method 2
+        User user = User.builder().userName("ABC").id(111).sex(true).build();
+        Integer integer = proxy.insertUserId(user);
+        System.out.println("向服务端插入数据:" + integer);
     }
 }

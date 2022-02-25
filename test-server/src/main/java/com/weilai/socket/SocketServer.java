@@ -1,17 +1,20 @@
 package com.weilai.socket;
 
-import com.weilai.common.User;
+import com.weilai.common.RPCRequest;
+import com.weilai.common.RPCResponse;
 import com.weilai.service.UserServiceImpl;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
  * @ClassName SocketServer
- * @Description: TODO
+ * @Description: 测试用提供端（服务端）
  */
 public class SocketServer {
     public static void main(String[] args) {
@@ -29,15 +32,18 @@ public class SocketServer {
                         ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
                         ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
 
-                        // 读取客户端传递的id
-                        Integer id = inputStream.readInt();
-                        User userId = userService.getUserByUserId(id);
+                        // 读取客户端传递的request
+                        RPCRequest request = (RPCRequest) inputStream.readObject();
 
-                        // 写入User对象给客户端
-                        outputStream.writeObject(userId);
+                        // 反射调用对应方法
+                        Method method = userService.getClass().getMethod(request.getMethodName(), request.getParamsTypes());
+                        Object invoke = method.invoke(userService, request.getParams());
+
+                        // 封装写入response对象
+                        outputStream.writeObject(RPCResponse.success(invoke));
                         outputStream.flush();
 
-                    } catch (IOException e) {
+                    } catch (IOException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                         System.out.println("从IO中读取数据错误");
                     }
