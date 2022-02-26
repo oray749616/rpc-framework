@@ -1,6 +1,8 @@
 package com.weilai.client;
 
+import com.weilai.common.Blog;
 import com.weilai.common.User;
+import com.weilai.service.BlogService;
 import com.weilai.service.UserService;
 
 /**
@@ -20,5 +22,10 @@ public class SocketClient {
         User user = User.builder().userName("ABC").id(111).sex(true).build();
         Integer integer = proxy.insertUserId(user);
         System.out.println("向服务端插入数据:" + integer);
+
+        // method 3
+        BlogService blogService = clientProxy.getProxy(BlogService.class);
+        Blog blogById = blogService.getBlogById(10000);
+        System.out.println("从服务端得到的blog为: " + blogById);
     }
 }
