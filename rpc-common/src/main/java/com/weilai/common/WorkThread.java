@@ -13,6 +13,10 @@ import java.net.Socket;
 /**
  * @ClassName WorkThread
  * @Description: 解析得到的request请求，执行服务方法，返回给客户端
+ * 1. 从request得到interfaceName
+ * 2. 根据interfaceName在serviceProviderMap中获得服务端的实现类
+ * 3. 从request得到方法名，参数，利用反射执行服务中的方法
+ * 4. 得到结果，封装成response，传递给socket
  */
 
 @AllArgsConstructor
