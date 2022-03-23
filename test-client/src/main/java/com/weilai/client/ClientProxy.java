@@ -2,6 +2,7 @@ package com.weilai.client;
 
 import com.weilai.common.RPCRequest;
 import com.weilai.common.RPCResponse;
+import com.weilai.transport.RPCClient;
 import lombok.AllArgsConstructor;
 
 import java.lang.reflect.InvocationHandler;
@@ -15,12 +16,9 @@ import java.lang.reflect.Proxy;
 
 @AllArgsConstructor
 public class ClientProxy implements InvocationHandler {
-    // 传入参数Service接口的class对象，反射封装成一个request
-    private String host;
-    private int port;
+    private RPCClient client;
 
     // 动态代理
-
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         RPCRequest request = RPCRequest.builder().interfaceName(method.getDeclaringClass().getName())
@@ -28,7 +26,7 @@ public class ClientProxy implements InvocationHandler {
                 .params(args)
                 .paramsTypes(method.getParameterTypes()).build();
 
-        RPCResponse response = IOClient.sendRequest(host, port, request);
+        RPCResponse response = client.sendRequest(request);
 
         return response.getData();
     }
