@@ -1,8 +1,8 @@
 package com.weilai.service;
 
-import com.weilai.common.WorkThread;
+import com.weilai.WorkThread;
 import com.weilai.provider.ServiceProvider;
-import com.weilai.socket.RPCServer;
+import com.weilai.transport.RPCServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;

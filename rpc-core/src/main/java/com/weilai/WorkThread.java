@@ -1,5 +1,7 @@
-package com.weilai.common;
+package com.weilai;
 
+import com.weilai.common.RPCRequest;
+import com.weilai.common.RPCResponse;
 import com.weilai.provider.ServiceProvider;
 import lombok.AllArgsConstructor;
 

@@ -2,6 +2,8 @@ package com.weilai.client;
 
 import com.weilai.common.RPCRequest;
 import com.weilai.common.RPCResponse;
+import com.weilai.transport.RPCClient;
+import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,11 +11,17 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * @ClassName IOClient
- * @Description: 底层通信
+ * @ClassName SimpleRPCClient
+ * @Description: 使用Java BIO方式通信
  */
-public class IOClient {
-    public static RPCResponse sendRequest(String host, int port, RPCRequest request) {
+
+@AllArgsConstructor
+public class SimpleRPCClient implements RPCClient {
+    private String host;
+    private int port;
+
+    @Override
+    public RPCResponse sendRequest(RPCRequest request) {
         try {
             Socket socket = new Socket(host, port);
 

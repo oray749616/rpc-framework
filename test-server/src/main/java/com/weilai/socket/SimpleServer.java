@@ -2,6 +2,8 @@ package com.weilai.socket;
 
 import com.weilai.provider.ServiceProvider;
 import com.weilai.service.*;
+import com.weilai.transport.RPCServer;
+import com.weilai.transport.netty.server.NettyServer;
 
 /**
  * @ClassName SimpleServer
@@ -17,7 +19,7 @@ public class SimpleServer {
         serviceProvider.providerServiceInterface(userService);
         serviceProvider.providerServiceInterface(blogService);
 
-        RPCServer rpcServer = new ThreadPoolRPCServer(serviceProvider);
+        RPCServer rpcServer = new NettyServer(serviceProvider);
         rpcServer.start(8899);
     }
 }
