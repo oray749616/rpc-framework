@@ -1,7 +1,7 @@
 package com.weilai.client;
 
-import com.weilai.common.RPCRequest;
-import com.weilai.common.RPCResponse;
+import com.weilai.dto.RPCRequest;
+import com.weilai.dto.RPCResponse;
 import com.weilai.transport.RPCClient;
 import lombok.AllArgsConstructor;
 

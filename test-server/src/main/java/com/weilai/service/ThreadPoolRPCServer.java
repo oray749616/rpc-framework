@@ -47,9 +47,4 @@ public class ThreadPoolRPCServer implements RPCServer {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void stop() {
-
-    }
 }

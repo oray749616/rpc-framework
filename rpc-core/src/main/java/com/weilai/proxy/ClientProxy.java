@@ -1,7 +1,7 @@
-package com.weilai.client;
+package com.weilai.proxy;
 
-import com.weilai.common.RPCRequest;
-import com.weilai.common.RPCResponse;
+import com.weilai.dto.RPCRequest;
+import com.weilai.dto.RPCResponse;
 import com.weilai.transport.RPCClient;
 import lombok.AllArgsConstructor;
 
@@ -31,8 +31,11 @@ public class ClientProxy implements InvocationHandler {
         return response.getData();
     }
 
-    <T>T getProxy(Class clazz) {
-        Object obj = Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, this);
-        return (T)obj;
+    /**
+     * 获得代理对象
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getProxy(Class<T> clazz) {
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[]{clazz}, this);
     }
 }

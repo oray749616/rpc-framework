@@ -1,7 +1,7 @@
 package com.weilai.transport.netty.client;
 
-import com.weilai.common.RPCRequest;
-import com.weilai.common.RPCResponse;
+import com.weilai.dto.RPCRequest;
+import com.weilai.dto.RPCResponse;
 import com.weilai.transport.RPCClient;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -34,6 +34,7 @@ public class NettyClient implements RPCClient {
     @Override
     public RPCResponse sendRequest(RPCRequest request) {
         try {
+            // 建立连接
             ChannelFuture channelFuture = bootstrap.connect(host, port).sync();
             Channel channel = channelFuture.channel();
             // 发送数据
@@ -46,6 +47,9 @@ public class NettyClient implements RPCClient {
             return response;
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            // 关闭相关线程组资源
+            eventLoopGroup.shutdownGracefully();
         }
 
         return null;
