@@ -1,7 +1,7 @@
 package com.weilai.transport.netty.server;
 
-import com.weilai.common.RPCRequest;
-import com.weilai.common.RPCResponse;
+import com.weilai.dto.RPCRequest;
+import com.weilai.dto.RPCResponse;
 import com.weilai.provider.ServiceProvider;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

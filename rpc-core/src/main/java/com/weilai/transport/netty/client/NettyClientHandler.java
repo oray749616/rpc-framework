@@ -1,6 +1,6 @@
 package com.weilai.transport.netty.client;
 
-import com.weilai.common.RPCResponse;
+import com.weilai.dto.RPCResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;

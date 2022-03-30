@@ -1,4 +1,4 @@
-package com.weilai.common;
+package com.weilai.dto;
 
 import lombok.Builder;
 import lombok.Data;

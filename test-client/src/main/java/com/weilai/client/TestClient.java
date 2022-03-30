@@ -2,6 +2,7 @@ package com.weilai.client;
 
 import com.weilai.common.Blog;
 import com.weilai.common.User;
+import com.weilai.proxy.ClientProxy;
 import com.weilai.service.BlogService;
 import com.weilai.service.UserService;
 import com.weilai.transport.RPCClient;
