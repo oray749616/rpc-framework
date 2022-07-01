@@ -22,9 +22,15 @@ public class KryoSerializer implements CommonSerializer {
         Kryo kryo = new Kryo();
         kryo.register(RPCResponse.class);
         kryo.register(RPCRequest.class);
+        kryo.setReferences(true);
+        kryo.setRegistrationRequired(false);
         return kryo;
     });
 
+    /**
+     * @param obj 需要序列化的对象
+     * @return 序列化后的byte数组
+     */
     @Override
     public byte[] serialize(Object obj) {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -42,6 +48,13 @@ public class KryoSerializer implements CommonSerializer {
         }
     }
 
+    /**
+     * @param bytes 序列化后的字节数组
+     * @param clazz 目标类<br/>
+     *              例如 {@code String.class} 的类型是 {@code Class<String>}<br/>
+     *              如果不知道类的类型，使用 {@code Class<?>}
+     * @return 反序列化后的对象
+     */
     @Override
     public <T> T deserialize(byte[] bytes, Class<T> clazz) {
         try (ByteArrayInputStream is = new ByteArrayInputStream(bytes);

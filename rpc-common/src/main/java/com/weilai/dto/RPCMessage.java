@@ -19,6 +19,8 @@ public class RPCMessage {
     private int messageType;
     // serialization type
     private int codec;
+    //request id
+    private int requestId;
     // request data
     private Object data;
 

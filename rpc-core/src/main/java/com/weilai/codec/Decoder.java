@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 @Slf4j
-public class Decoder extends ReplayingDecoder {
+public class Decoder extends ReplayingDecoder<Void> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {

@@ -1,23 +1,22 @@
-package com.weilai.common;
+package com.weilai.service;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
- * @ClassName Blog
- * @Description: TODO
+ * @ClassName Hello
+ * @Description: 测试用api实体
  */
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Blog implements Serializable {
+public class Hello implements Serializable {
+
     private Integer id;
-    private Integer userId;
-    private String title;
+    private String message;
+
 }

@@ -1,29 +1,12 @@
 package com.weilai.provider;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @ClassName ServiceProvider
- * @Description: TODO
+ * @Description: 保存和提供服务实例对象
  */
-public class ServiceProvider {
-    private final Map<String, Object> interfaceProvider;
+public interface ServiceProvider {
 
-    public ServiceProvider() {
-        this.interfaceProvider = new HashMap<>();
-    }
+    <T> void addServiceProvider(T service, String serviceName);
 
-    public void providerServiceInterface(Object service) {
-        String serviceName = service.getClass().getName();
-        Class<?>[] interfaces = service.getClass().getInterfaces();
-
-        for (Class clazz : interfaces) {
-            interfaceProvider.put(clazz.getName(), service);
-        }
-    }
-
-    public Object getService(String interfaceName) {
-        return interfaceProvider.get(interfaceName);
-    }
+    Object getServiceProvider(String serviceName);
 }

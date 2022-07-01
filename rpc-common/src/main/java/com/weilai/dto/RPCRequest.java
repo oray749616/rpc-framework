@@ -1,7 +1,6 @@
 package com.weilai.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -10,9 +9,14 @@ import java.io.Serializable;
  * @Description: 定义一个通用的Request对象（消息格式）
  */
 
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 @Builder
+@ToString
 public class RPCRequest implements Serializable {
+    // 请求号
+    private String requestId;
     // 服务类名
     private String interfaceName;
     // 方法名

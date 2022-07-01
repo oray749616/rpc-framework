@@ -2,32 +2,44 @@ package com.weilai.transport.netty.server;
 
 import com.weilai.dto.RPCRequest;
 import com.weilai.dto.RPCResponse;
-import com.weilai.provider.ServiceProvider;
+import com.weilai.factory.SingletonFactory;
+import com.weilai.handler.RequestHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import lombok.AllArgsConstructor;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * @ClassName NettyServerHandler
  * @Description: 消息处理器
  */
 @Slf4j
-@AllArgsConstructor
 public class NettyServerHandler extends SimpleChannelInboundHandler<RPCRequest> {
-    private ServiceProvider provider;
+
+    private final RequestHandler requestHandler;
+
+    public NettyServerHandler() {
+        this.requestHandler = SingletonFactory.getInstance(RequestHandler.class);
+    }
 
     /**
      * 读取数据
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RPCRequest msg) throws Exception {
-        RPCResponse response = getResponse(msg);
-        ctx.writeAndFlush(response);
-        ctx.close();
+        try {
+            log.info("服务器接收到请求： {}", msg);
+            Object result = requestHandler.handle(msg);
+            if (ctx.channel().isActive() && ctx.channel().isWritable()) {
+                ctx.writeAndFlush(RPCResponse.success(result, msg.getRequestId()));
+            } else {
+                log.error("通道不可写");
+            }
+        } finally {
+            ReferenceCountUtil.release(msg);
+        }
     }
 
     /**
@@ -40,18 +52,16 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RPCRequest> 
         ctx.close();
     }
 
-    RPCResponse getResponse(RPCRequest request) {
-        String interfaceName = request.getInterfaceName();
-        Object service = provider.getService(interfaceName);
-        Method method = null;
-        try {
-            method = service.getClass().getMethod(request.getMethodName(), request.getParamsTypes());
-            Object invoke = method.invoke(service, request.getParams());
-            return RPCResponse.success(invoke);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-            log.error("方法执行错误");
-            return RPCResponse.fail();
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent) {
+            IdleState state = ((IdleStateEvent) evt).state();
+            if (state == IdleState.READER_IDLE) {
+                log.info("长时间未收到心跳包，断开连接");
+                ctx.close();
+            } else {
+                super.userEventTriggered(ctx, evt);
+            }
         }
     }
 }
